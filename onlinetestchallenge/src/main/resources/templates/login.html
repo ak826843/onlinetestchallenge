@@ -1,0 +1,63 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Welcome to the test</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <style>
+	    	#outer {
+	    	  width: 100%;
+	    	  text-align: center;
+	    	}
+	
+	    	#inner {
+	    	  display: inline-block;
+	    	  border-style: solid;
+    		  border-width: 5px;
+	    	}
+    </style>
+</head>
+<body>
+<div id="outer">
+	<div id="inner">
+<h1>Exam</h1>
+<br/>
+	<form action="#"  th:object="${user}" th:action="@{/login}" method="post">
+		<table>
+			<thead>
+				<tr>
+					<th>
+						Duration <p style="width: 600px; height: 100px" th:text="${exam.duration}" />
+						<p style="width: 600px; height: 100px" th:text="${exam.description} + '!'" />
+						
+						<div th:if="${#fields.hasAnyErrors()}">
+						  <p th:each="err : ${#fields.allErrors()}" th:text="${err}">...</p>
+						</div>
+						
+						  <input hidden="" type="text" th:value="${exam.id}" name="id"/>
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>
+						<label>Username: </label><input required="required" type="text" name="userName" th:field="*{userName}" />
+						<label th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}" ></label>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label>Password: </label><input required="required" type="text" name="password" th:field="*{password}" />
+						<label th:if="${#fields.hasErrors('password')}" th:errors="*{password}" ></label>
+					</td>
+					
+				</tr>
+				<tr>
+					<td> <button type="submit" name="save" >Submit</button> </td>
+				</tr>
+			</tbody>
+		</table>    
+	</form>
+	</div>
+	</div>
+</body>
+</html>

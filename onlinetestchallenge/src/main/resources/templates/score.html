@@ -1,0 +1,67 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Score Page</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <style>
+	    	#outer {
+	    	  width: 100%;
+	    	  text-align: center;
+	    	}
+	
+	    	#inner {
+	    	  display: inline-block;
+	    	  border-style: solid;
+    		  border-width: 5px;
+	    	}
+    </style>
+</head>
+<body>
+	<div id="outer">
+	<div id="inner">
+	    <h1>Score of the Exam</h1>
+		<table>
+			<thead>
+				<tr>
+					<th>
+						<p style="width: 600px; height: 50px" th:text="'Hello, ' + ${score.user.name}" />
+					   <h2  th:if="${score.flgIsAproved}" style="color: green;" >You're approved! Congratulations!</h2>
+					   <h2  th:if="!${score.flgIsAproved}" style="color: red;">You didn't hit the pass score. Try again</h2>						
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>
+						<p style="width: 600px; height: 50px" th:text="'You got ' + ${score.grade} + ' points of '+ ${score.grade} + ' questions '"  />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<a href="/login" >Begin</a>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<p>Here's your last 5 results </p>
+							<table border="1" >
+								<tbody>
+									<th:block th:each="var : ${scores}" >
+										<tr>
+											<td th:text="${var.nameExam}" />
+											<td th:text="${var.grade}" />
+											<td th:text="${var.totalExam}" />											
+											<td th:if="!${var.flgIsAproved}" style="color: red;" >REPROVED</td>
+											<td th:if="${var.flgIsAproved}" style="color: green;" >APROVED</td>						
+										</tr>
+									</th:block>
+								</tbody>
+							</table>
+					</td>
+				</tr>
+			</tbody>
+		</table>	    
+    </div>
+    </div>
+</body>
+</html>

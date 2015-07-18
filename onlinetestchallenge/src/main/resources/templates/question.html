@@ -1,0 +1,122 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Welcome to the test</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+     <script type="text/javascript"
+            src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js">
+    </script> 
+    <style>
+	    	#outer {
+	    	  width: 100%;
+	    	  text-align: center;
+	    	}
+	
+	    	#inner {
+	    	  display: inline-block;
+	    	  border-style: solid;
+    		  border-width: 5px;
+	    	}
+    </style>
+    <script type="text/javascript">
+    $(function() {
+		$("#btn_finalize").click(function(event) {
+			
+			$.ajax({
+				type : 'POST',
+				url : 'questionFinalize',
+				dataType : 'json',				
+		        success: function(json) {
+		        	if(!json){		        	
+		        		var r = confirm("There's question without answer. Would you like to finalize?");
+		        		if (r == true) {
+		        			document.location.href = '/score';
+		        		}
+		        	}else{
+		        		document.location.href = '/score';
+		        	}
+		        },
+		        error: function(e){
+		        	alert(e)
+		        }
+			});
+		});
+	});
+    
+    
+    setInterval(ajaxCall, 2000)
+    
+    function ajaxCall(){
+    	$.ajax({
+			type : 'POST',
+			url : 'verifytime',
+			dataType : 'json',				
+	        success: function(json) {
+	        	//alert(json.toString())
+	        	if(!json){
+	        		alert("The time is over!");
+	        		document.location.href = '/login';
+	        	}
+	        },
+	        error: function(e){
+	        	//alert(e)
+	        }
+		});
+    }
+    
+    </script>
+</head>
+<body>
+
+	<div id="outer">
+		<div id="inner">
+			<h1>Exam</h1>
+			<br/>
+				<form id="questionForm"  action="#"  th:object="${question}" th:action="@{/question}" method="post">
+					<table>
+						<thead>
+							<tr>
+								<th>
+									<p style="width: 600px; height: 50px" th:text="${question.tittle}" />
+									
+								</th>
+							</tr>
+							<tr>
+								<th>
+									<p style="width: 600px; height: 70px" th:text="${question.description}" />
+									 <input hidden="" type="text" th:value="${question.order}" name="order"/>
+									 <input hidden="" type="text" th:value="${question.id}" name="id"/>
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+								<tr th:each="clause, iterationStatus : ${question.clauses}">
+									<td align="left" >
+										<input th:text="${clause.description}" style="margin-left: 30%" type="checkbox" th:value="${clause.id}"   th:checked="${#lists.contains(clausesAnswered, clause)}" th:name="clauses + [__${iterationStatus.index}__].id" />										
+									</td>
+								</tr>
+								
+								<tr>
+									<td>
+										<br/>
+										<button type="submit" name="save" >Submit and next</button>
+										<button id="btn_finalize" type="button" >Finalize</button>
+									</td>
+								</tr>
+								
+								<tr>
+									<td>
+										<br/>
+										<a th:each="varQuestion : ${questions}" >
+											<a th:href="@{/question(order=${varQuestion.order})}" ><label th:text="'|' + ${varQuestion.tittle} + '|'"></label></a>
+										</a>
+									</td>
+								</tr>
+						</tbody>
+					</table>    
+				</form>
+		</div>
+	</div>
+
+</body>
+</html>

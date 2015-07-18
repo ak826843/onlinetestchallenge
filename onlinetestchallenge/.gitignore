@@ -1,0 +1,9 @@
+# sbt specific
+dist/*
+target/
+.classpath
+.project
+.springBeans
+.settings/*
+bin/*
+/bin/
